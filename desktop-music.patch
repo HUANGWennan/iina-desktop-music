@@ -1,0 +1,915 @@
+diff --git a/Configs/OpenInIINA.xcconfig b/Configs/OpenInIINA.xcconfig
+index b06d57f..0461b7b 100644
+--- a/Configs/OpenInIINA.xcconfig
++++ b/Configs/OpenInIINA.xcconfig
+@@ -11,6 +11,6 @@ CODE_SIGN_ENTITLEMENTS = $(TARGET_NAME)/$(PRODUCT_NAME).entitlements
+ GENERATE_INFOPLIST_FILE = YES
+ INFOPLIST_FILE = $(TARGET_NAME)/Info.plist
+ LD_RUNPATH_SEARCH_PATHS = @executable_path/../Frameworks
+-PRODUCT_BUNDLE_IDENTIFIER = com.colliderli.iina.$(TARGET_NAME)
++PRODUCT_BUNDLE_IDENTIFIER = org.iina.desktop-music.$(TARGET_NAME)
+ PRODUCT_NAME = $(TARGET_NAME)
+ SKIP_INSTALL = YES
+diff --git a/Configs/iina.xcconfig b/Configs/iina.xcconfig
+index 098c854..836e9da 100644
+--- a/Configs/iina.xcconfig
++++ b/Configs/iina.xcconfig
+@@ -7,7 +7,7 @@
+ //
+ 
+ CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES
+-CODE_SIGN_ENTITLEMENTS = $(TARGET_NAME)/$(PRODUCT_NAME).entitlements
++CODE_SIGN_ENTITLEMENTS = $(TARGET_NAME)/IINA.entitlements
+ COMBINE_HIDPI_IMAGES = YES
+ FRAMEWORK_SEARCH_PATHS = $(inherited) $(SYSTEM_LIBRARY_DIR)/PrivateFrameworks
+ GENERATE_INFOPLIST_FILE = YES
+@@ -19,7 +19,7 @@ INFOPLIST_PREPROCESS = YES
+ INFOPLIST_KEY_NSPrincipalClass = NSApplication
+ LD_RUNPATH_SEARCH_PATHS = $(inherited) @executable_path/../Frameworks
+ LIBRARY_SEARCH_PATHS = $(inherited) $(SRCROOT)/deps/lib
+-PRODUCT_BUNDLE_IDENTIFIER = com.colliderli.$(TARGET_NAME)
++PRODUCT_BUNDLE_IDENTIFIER = org.iina.desktop-music
+ PRODUCT_NAME = IINA
+ SWIFT_EMIT_LOC_STRINGS = YES
+ SWIFT_OBJC_BRIDGING_HEADER = $(TARGET_NAME)/$(TARGET_NAME)-Bridging-Header.h
+diff --git a/OpenInIINA/SafariExtensionHandler.swift b/OpenInIINA/SafariExtensionHandler.swift
+index 14fb4af..07683ac 100644
+--- a/OpenInIINA/SafariExtensionHandler.swift
++++ b/OpenInIINA/SafariExtensionHandler.swift
+@@ -53,7 +53,7 @@ class SafariExtensionHandler: SFSafariExtensionHandler {
+ 
+   func launchIINA(withURL url: String) {
+     guard let escapedURL = url.addingPercentEncoding(withAllowedCharacters: .alphanumerics),
+-      let url = URL(string: "iina://weblink?url=\(escapedURL)") else {
++      let url = URL(string: "iina-desktop-music://weblink?url=\(escapedURL)") else {
+         return
+     }
+     NSWorkspace.shared.open(url)
+diff --git a/iina.xcodeproj/project.pbxproj b/iina.xcodeproj/project.pbxproj
+index 18c5f90..af655eb 100644
+--- a/iina.xcodeproj/project.pbxproj
++++ b/iina.xcodeproj/project.pbxproj
+@@ -206,6 +206,7 @@
+ 		8488D6E71E11ABE900D5B952 /* PrefNetworkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8488D6E51E11ABE900D5B952 /* PrefNetworkViewController.swift */; };
+ 		8492C2861E771FB200CE5825 /* ISO639.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8492C2851E771FB200CE5825 /* ISO639.strings */; };
+ 		8492C2881E7721A600CE5825 /* ISO639Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8492C2871E7721A600CE5825 /* ISO639Helper.swift */; };
++		F72C6301A918008CE657C201 /* DesktopMusicControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = F72C6301A918008CE657C202 /* DesktopMusicControls.swift */; };
+ 		849581F11F02728700D3B359 /* InitialWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849581EF1F02728700D3B359 /* InitialWindowController.swift */; };
+ 		849581F31F03D55A00D3B359 /* InitialWindowController.strings in Resources */ = {isa = PBXBuildFile; fileRef = 849581F51F03D55A00D3B359 /* InitialWindowController.strings */; };
+ 		84A09A0E1F2DF596000FF343 /* MiniPlayerWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84A09A0C1F2DF596000FF343 /* MiniPlayerWindowController.swift */; };
+@@ -1302,6 +1303,7 @@
+ 		848F50902085A99500E998FD /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/SubChooseViewController.strings"; sourceTree = "<group>"; };
+ 		8492C2851E771FB200CE5825 /* ISO639.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = ISO639.strings; sourceTree = "<group>"; };
+ 		8492C2871E7721A600CE5825 /* ISO639Helper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ISO639Helper.swift; sourceTree = "<group>"; };
++		F72C6301A918008CE657C202 /* DesktopMusicControls.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DesktopMusicControls.swift; sourceTree = "<group>"; };
+ 		849581EF1F02728700D3B359 /* InitialWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InitialWindowController.swift; sourceTree = "<group>"; };
+ 		849581F71F03D55C00D3B359 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InitialWindowController.strings"; sourceTree = "<group>"; };
+ 		8497A4831D2FF573005F504F /* iina-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "iina-Bridging-Header.h"; sourceTree = "<group>"; };
+@@ -2140,6 +2142,7 @@
+ 				8418A2F7213F5791003166AC /* OpenURLWindowController.xib */,
+ 				84C6D3651EB2A427009BF721 /* HistoryWindowController.swift */,
+ 				846352571EEEE11A0043F0CC /* ThumbnailPeekView.swift */,
++				F72C6301A918008CE657C202 /* DesktopMusicControls.swift */,
+ 				849581EF1F02728700D3B359 /* InitialWindowController.swift */,
+ 				849581F51F03D55A00D3B359 /* InitialWindowController.strings */,
+ 				84A09A0C1F2DF596000FF343 /* MiniPlayerWindowController.swift */,
+@@ -2906,6 +2909,7 @@
+ 			files = (
+ 				E3EC8C432F94330400FBB51E /* Dialog.swift in Sources */,
+ 				E35306FA214808AB008FE492 /* JavascriptAPIEvent.swift in Sources */,
++				F72C6301A918008CE657C201 /* DesktopMusicControls.swift in Sources */,
+ 				849581F11F02728700D3B359 /* InitialWindowController.swift in Sources */,
+ 				8461C52E1D45FFF6006E91FF /* PlaySliderCell.swift in Sources */,
+ 				84F5D4A21E4796F50060A838 /* KeyBindingTranslator.swift in Sources */,
+diff --git a/iina/Base.lproj/MainMenu.xib b/iina/Base.lproj/MainMenu.xib
+index babb72a..465b537 100644
+--- a/iina/Base.lproj/MainMenu.xib
++++ b/iina/Base.lproj/MainMenu.xib
+@@ -32,12 +32,6 @@
+                                     <action selector="showAboutWindow:" target="Voe-Tx-rLC" id="HGv-E1-lQH"/>
+                                 </connections>
+                             </menuItem>
+-                            <menuItem title="Check for Updates..." id="gMo-qL-m08">
+-                                <modifierMask key="keyEquivalentModifierMask"/>
+-                                <connections>
+-                                    <action selector="checkForUpdates:" target="wTK-gz-aTs" id="MFD-wN-SXh"/>
+-                                </connections>
+-                            </menuItem>
+                             <menuItem isSeparatorItem="YES" id="VOq-y0-SEH"/>
+                             <menuItem title="Preferences…" keyEquivalent="," id="BOF-NM-1cW">
+                                 <connections>
+diff --git a/iina/DraggingDetect.swift b/iina/DraggingDetect.swift
+index ad5cdd0..dc1dcbd 100644
+--- a/iina/DraggingDetect.swift
++++ b/iina/DraggingDetect.swift
+@@ -46,7 +46,7 @@ extension PlayerCore {
+      - urls: The list as an array of `URL`.
+    - Returns: URLs of all playable files as an array of `URL`.
+    */
+-  func getPlayableFiles(in urls: [URL]) -> [URL] {
++  func getPlayableFiles(in urls: [URL], preservingOrder: Bool = false) -> [URL] {
+     var playableFiles: [URL] = []
+     for url in urls {
+       if !url.isFileURL {
+@@ -70,6 +70,10 @@ extension PlayerCore {
+         }
+       }
+     }
++    if preservingOrder {
++      var seen = Set<URL>()
++      return playableFiles.filter { seen.insert($0).inserted }
++    }
+     return Array(Set(playableFiles)).sorted { url1, url2 in
+       let folder1 = url1.deletingLastPathComponent(), folder2 = url2.deletingLastPathComponent()
+       if folder1.absoluteString == folder2.absoluteString {
+diff --git a/iina/Info.plist b/iina/Info.plist
+index 8593038..947ec51 100644
+--- a/iina/Info.plist
++++ b/iina/Info.plist
+@@ -2,6 +2,8 @@
+ <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+ <plist version="1.0">
+ <dict>
++	<key>CFBundleDisplayName</key>
++	<string>IINA Desktop Music</string>
+ 	<key>CFBundleDocumentTypes</key>
+ 	<array>
+ 		<dict>
+@@ -10,7 +12,7 @@
+ 			<key>CFBundleTypeRole</key>
+ 			<string>Viewer</string>
+ 			<key>LSHandlerRank</key>
+-			<string>Default</string>
++			<string>Alternate</string>
+ 			<key>LSItemContentTypes</key>
+ 			<array>
+ 				<string>public.folder</string>
+@@ -33,7 +35,7 @@
+ 			<key>CFBundleTypeRole</key>
+ 			<string>Viewer</string>
+ 			<key>LSHandlerRank</key>
+-			<string>Default</string>
++			<string>Alternate</string>
+ 			<key>LSTypeIsPackage</key>
+ 			<false/>
+ 			<key>NSPersistentStoreTypeKey</key>
+@@ -53,7 +55,7 @@
+ 			<key>CFBundleTypeRole</key>
+ 			<string>Viewer</string>
+ 			<key>LSHandlerRank</key>
+-			<string>Default</string>
++			<string>Alternate</string>
+ 			<key>LSItemContentTypes</key>
+ 			<array>
+ 				<string></string>
+@@ -77,7 +79,7 @@
+ 			<key>CFBundleTypeRole</key>
+ 			<string>Viewer</string>
+ 			<key>LSHandlerRank</key>
+-			<string>Default</string>
++			<string>Alternate</string>
+ 			<key>LSTypeIsPackage</key>
+ 			<false/>
+ 			<key>NSPersistentStoreTypeKey</key>
+@@ -97,7 +99,7 @@
+ 			<key>CFBundleTypeRole</key>
+ 			<string>Viewer</string>
+ 			<key>LSHandlerRank</key>
+-			<string>Default</string>
++			<string>Alternate</string>
+ 			<key>LSTypeIsPackage</key>
+ 			<false/>
+ 			<key>NSPersistentStoreTypeKey</key>
+@@ -117,7 +119,7 @@
+ 			<key>CFBundleTypeRole</key>
+ 			<string>Viewer</string>
+ 			<key>LSHandlerRank</key>
+-			<string>Default</string>
++			<string>Alternate</string>
+ 			<key>LSTypeIsPackage</key>
+ 			<false/>
+ 			<key>NSPersistentStoreTypeKey</key>
+@@ -141,7 +143,7 @@
+ 			<key>CFBundleTypeRole</key>
+ 			<string>Viewer</string>
+ 			<key>LSHandlerRank</key>
+-			<string>Default</string>
++			<string>Alternate</string>
+ 			<key>LSTypeIsPackage</key>
+ 			<false/>
+ 			<key>NSPersistentStoreTypeKey</key>
+@@ -161,7 +163,7 @@
+ 			<key>CFBundleTypeRole</key>
+ 			<string>Viewer</string>
+ 			<key>LSHandlerRank</key>
+-			<string>Default</string>
++			<string>Alternate</string>
+ 			<key>LSTypeIsPackage</key>
+ 			<false/>
+ 			<key>NSPersistentStoreTypeKey</key>
+@@ -181,7 +183,7 @@
+ 			<key>CFBundleTypeRole</key>
+ 			<string>Viewer</string>
+ 			<key>LSHandlerRank</key>
+-			<string>Default</string>
++			<string>Alternate</string>
+ 			<key>LSTypeIsPackage</key>
+ 			<false/>
+ 			<key>NSPersistentStoreTypeKey</key>
+@@ -202,7 +204,7 @@
+ 			<key>CFBundleTypeRole</key>
+ 			<string>Viewer</string>
+ 			<key>LSHandlerRank</key>
+-			<string>Default</string>
++			<string>Alternate</string>
+ 			<key>LSTypeIsPackage</key>
+ 			<false/>
+ 			<key>NSPersistentStoreTypeKey</key>
+@@ -222,7 +224,7 @@
+ 			<key>CFBundleTypeRole</key>
+ 			<string>Viewer</string>
+ 			<key>LSHandlerRank</key>
+-			<string>Default</string>
++			<string>Alternate</string>
+ 			<key>LSTypeIsPackage</key>
+ 			<false/>
+ 			<key>NSPersistentStoreTypeKey</key>
+@@ -243,7 +245,7 @@
+ 			<key>CFBundleTypeRole</key>
+ 			<string>Viewer</string>
+ 			<key>LSHandlerRank</key>
+-			<string>Default</string>
++			<string>Alternate</string>
+ 			<key>LSTypeIsPackage</key>
+ 			<false/>
+ 			<key>NSPersistentStoreTypeKey</key>
+@@ -264,7 +266,7 @@
+ 			<key>CFBundleTypeRole</key>
+ 			<string>Viewer</string>
+ 			<key>LSHandlerRank</key>
+-			<string>Default</string>
++			<string>Alternate</string>
+ 			<key>LSTypeIsPackage</key>
+ 			<false/>
+ 			<key>NSPersistentStoreTypeKey</key>
+@@ -286,7 +288,7 @@
+ 			<key>CFBundleTypeRole</key>
+ 			<string>Viewer</string>
+ 			<key>LSHandlerRank</key>
+-			<string>Default</string>
++			<string>Alternate</string>
+ 			<key>LSTypeIsPackage</key>
+ 			<false/>
+ 			<key>NSPersistentStoreTypeKey</key>
+@@ -306,7 +308,7 @@
+ 			<key>CFBundleTypeRole</key>
+ 			<string>Viewer</string>
+ 			<key>LSHandlerRank</key>
+-			<string>Default</string>
++			<string>Alternate</string>
+ 			<key>LSTypeIsPackage</key>
+ 			<false/>
+ 			<key>NSPersistentStoreTypeKey</key>
+@@ -326,7 +328,7 @@
+ 			<key>CFBundleTypeRole</key>
+ 			<string>Viewer</string>
+ 			<key>LSHandlerRank</key>
+-			<string>Default</string>
++			<string>Alternate</string>
+ 			<key>LSTypeIsPackage</key>
+ 			<false/>
+ 			<key>NSPersistentStoreTypeKey</key>
+@@ -347,7 +349,7 @@
+ 			<key>CFBundleTypeRole</key>
+ 			<string>Viewer</string>
+ 			<key>LSHandlerRank</key>
+-			<string>Default</string>
++			<string>Alternate</string>
+ 			<key>LSTypeIsPackage</key>
+ 			<false/>
+ 			<key>NSPersistentStoreTypeKey</key>
+@@ -368,7 +370,7 @@
+ 			<key>CFBundleTypeRole</key>
+ 			<string>Viewer</string>
+ 			<key>LSHandlerRank</key>
+-			<string>Default</string>
++			<string>Alternate</string>
+ 			<key>LSTypeIsPackage</key>
+ 			<false/>
+ 			<key>NSPersistentStoreTypeKey</key>
+@@ -389,7 +391,7 @@
+ 			<key>CFBundleTypeRole</key>
+ 			<string>Viewer</string>
+ 			<key>LSHandlerRank</key>
+-			<string>Default</string>
++			<string>Alternate</string>
+ 			<key>LSTypeIsPackage</key>
+ 			<false/>
+ 			<key>NSPersistentStoreTypeKey</key>
+@@ -409,7 +411,7 @@
+ 			<key>CFBundleTypeRole</key>
+ 			<string>Viewer</string>
+ 			<key>LSHandlerRank</key>
+-			<string>Default</string>
++			<string>Alternate</string>
+ 			<key>LSTypeIsPackage</key>
+ 			<false/>
+ 			<key>NSPersistentStoreTypeKey</key>
+@@ -430,7 +432,7 @@
+ 			<key>CFBundleTypeRole</key>
+ 			<string>Viewer</string>
+ 			<key>LSHandlerRank</key>
+-			<string>Default</string>
++			<string>Alternate</string>
+ 			<key>LSTypeIsPackage</key>
+ 			<false/>
+ 			<key>NSPersistentStoreTypeKey</key>
+@@ -452,7 +454,7 @@
+ 			<key>CFBundleTypeRole</key>
+ 			<string>Viewer</string>
+ 			<key>LSHandlerRank</key>
+-			<string>Default</string>
++			<string>Alternate</string>
+ 			<key>LSTypeIsPackage</key>
+ 			<false/>
+ 			<key>NSPersistentStoreTypeKey</key>
+@@ -483,7 +485,7 @@
+ 			<key>CFBundleTypeRole</key>
+ 			<string>Viewer</string>
+ 			<key>LSHandlerRank</key>
+-			<string>Default</string>
++			<string>Alternate</string>
+ 			<key>LSTypeIsPackage</key>
+ 			<false/>
+ 			<key>NSPersistentStoreTypeKey</key>
+@@ -515,7 +517,7 @@
+ 			<key>CFBundleTypeRole</key>
+ 			<string>Viewer</string>
+ 			<key>LSHandlerRank</key>
+-			<string>Default</string>
++			<string>Alternate</string>
+ 			<key>LSTypeIsPackage</key>
+ 			<false/>
+ 			<key>NSPersistentStoreTypeKey</key>
+@@ -537,7 +539,7 @@
+ 			<key>CFBundleTypeRole</key>
+ 			<string>Viewer</string>
+ 			<key>LSHandlerRank</key>
+-			<string>Default</string>
++			<string>Alternate</string>
+ 			<key>LSTypeIsPackage</key>
+ 			<false/>
+ 			<key>NSPersistentStoreTypeKey</key>
+@@ -557,7 +559,7 @@
+ 			<key>CFBundleTypeRole</key>
+ 			<string>Viewer</string>
+ 			<key>LSHandlerRank</key>
+-			<string>Default</string>
++			<string>Alternate</string>
+ 			<key>LSItemContentTypes</key>
+ 			<array>
+ 				<string>io.iina.iinaplugin</string>
+@@ -579,7 +581,7 @@
+ 			<key>CFBundleTypeRole</key>
+ 			<string>Viewer</string>
+ 			<key>LSHandlerRank</key>
+-			<string>Default</string>
++			<string>Alternate</string>
+ 			<key>LSItemContentTypes</key>
+ 			<array>
+ 				<string>io.iina.iinaplgz</string>
+@@ -597,7 +599,7 @@
+ 			<string>IINA wrapper</string>
+ 			<key>CFBundleURLSchemes</key>
+ 			<array>
+-				<string>iina</string>
++				<string>iina-desktop-music</string>
+ 			</array>
+ 		</dict>
+ 	</array>
+@@ -636,6 +638,10 @@
+ 			</array>
+ 		</dict>
+ 	</array>
++	<key>SUAllowsAutomaticUpdates</key>
++	<false/>
++	<key>SUEnableAutomaticChecks</key>
++	<false/>
+ 	<key>SUFeedURL</key>
+ 	<string>https://www.iina.io/appcast.xml</string>
+ 	<key>SUPublicDSAKeyFile</key>
+@@ -1381,17 +1387,17 @@
+       </dict>
+     </dict>
+ 	</array>
+-	<key>com.colliderli.iina.build.branch</key>
++	<key>org.iina.desktop-music.build.branch</key>
+ 	<string>IINA_BUILD_BRANCH</string>
+-	<key>com.colliderli.iina.build.commit</key>
++	<key>org.iina.desktop-music.build.commit</key>
+ 	<string>IINA_BUILD_COMMIT</string>
+-	<key>com.colliderli.iina.build.configuration</key>
++	<key>org.iina.desktop-music.build.configuration</key>
+ 	<string>$(CONFIGURATION)</string>
+-	<key>com.colliderli.iina.build.date</key>
++	<key>org.iina.desktop-music.build.date</key>
+ 	<string>IINA_BUILD_DATE</string>
+-	<key>com.colliderli.iina.build.sdk</key>
++	<key>org.iina.desktop-music.build.sdk</key>
+ 	<string>$(SDK_VERSION)</string>
+-	<key>com.colliderli.iina.build.xcode</key>
++	<key>org.iina.desktop-music.build.xcode</key>
+ 	<string>$(XCODE_VERSION_ACTUAL)</string>
+ </dict>
+ </plist>
+diff --git a/iina/InitialWindowController.swift b/iina/InitialWindowController.swift
+index e5acd96..f039704 100644
+--- a/iina/InitialWindowController.swift
++++ b/iina/InitialWindowController.swift
+@@ -156,6 +156,14 @@ class InitialWindowController: NSWindowController {
+     mainView.addSubview(actions)
+     actions.padding(.top(64), .trailing(paddingH))
+ 
++    let desktopMusic = DesktopMusicControls(compact: false, play: { [weak self] urls in
++      self?.player.openURLs(urls, shouldAutoLoad: false, preservingOrder: true)
++    }, playSearchResult: { [weak self] url, library in
++      self?.player.openURLs(library, shouldAutoLoad: false, preservingOrder: true, startingAt: url)
++    })
++    mainView.addSubview(desktopMusic)
++    desktopMusic.spacing(.top(10), to: header).padding(.leading(paddingH))
++
+     // resume last file
+ 
+     self.lastFileContainerView = InitialWindowViewActionButton()
+@@ -179,7 +187,7 @@ class InitialWindowController: NSWindowController {
+     lastFileRow.padding(.horizontal(10), .vertical(6))
+ 
+     mainView.addSubview(lastFileContainerView)
+-    lastFileContainerView.spacing(.top(16), to: header).padding(.horizontal(paddingH))
++    lastFileContainerView.spacing(.top(12), to: desktopMusic).padding(.horizontal(paddingH))
+ 
+     // table
+ 
+@@ -198,7 +206,7 @@ class InitialWindowController: NSWindowController {
+     scrollView.documentView = recentFilesTableView
+ 
+     mainView.addSubview(scrollView)
+-    self.recentFilesTableTopConstraint = scrollView.topAnchor.constraint(equalTo: header.bottomAnchor, constant: 24)
++    self.recentFilesTableTopConstraint = scrollView.topAnchor.constraint(equalTo: desktopMusic.bottomAnchor, constant: 24)
+     recentFilesTableTopConstraint.isActive = true
+     scrollView.padding(.bottom(24), .horizontal(paddingH - 6))
+ 
+diff --git a/iina/MiniPlayerWindowController.swift b/iina/MiniPlayerWindowController.swift
+index ddcb40d..cf43b3d 100644
+--- a/iina/MiniPlayerWindowController.swift
++++ b/iina/MiniPlayerWindowController.swift
+@@ -8,6 +8,7 @@
+ 
+ import Cocoa
+ 
++fileprivate let DesktopMusicRowHeight: CGFloat = 32
+ fileprivate let DefaultPlaylistHeight: CGFloat = 300
+ fileprivate let AutoHidePlaylistThreshold: CGFloat = 200
+ fileprivate let AnimationDurationShowControl: TimeInterval = 0.2
+@@ -15,7 +16,7 @@ fileprivate let AnimationDurationShowControl: TimeInterval = 0.2
+ 
+ fileprivate extension LayoutValue {
+   static let topPadding = LayoutValue(8, 4)
+-  static let bottomPadding = LayoutValue(10, 8)
++  static let desktopMusicBottomPadding = LayoutValue(10 + DesktopMusicRowHeight, 8 + DesktopMusicRowHeight)
+   static let controlTopPadding = LayoutValue(4, 0)
+   static let titleSliderSpacing = LayoutValue(8, 6)
+ }
+@@ -153,7 +154,14 @@ class MiniPlayerWindowController: PlayerWindowController, NSPopoverDelegate {
+     leftLabel.widthAnchor.constraint(equalTo: rightLabel.widthAnchor, multiplier: 1).isActive = true
+ 
+     backgroundView.addSubview(playSlider)
+-    playSlider.padding(.bottom(.bottomPadding))
++    let desktopMusic = DesktopMusicControls(compact: true, play: { [weak self] urls in
++      self?.player.openURLs(urls, shouldAutoLoad: false, preservingOrder: true)
++    }, playSearchResult: { [weak self] url, library in
++      self?.player.playDesktopMusicSearchResult(url, library: library)
++    })
++    backgroundView.addSubview(desktopMusic)
++    desktopMusic.padding(.bottom(5)).center(.x)
++    playSlider.padding(.bottom(.desktopMusicBottomPadding))
+     playSlider.spacing(.leading(6), to: leftLabel)
+     leftLabel.center(.y, with: playSlider)
+     rightLabel.spacing(.leading(6), to: playSlider)
+@@ -713,7 +721,7 @@ class MiniPlayerWindowController: PlayerWindowController, NSPopoverDelegate {
+   // MARK: - Utils
+ 
+   private func normalWindowHeight() -> CGFloat {
+-    return 72 + (isVideoVisible ? videoWrapperView.frame.height : 0)
++    return 72 + DesktopMusicRowHeight + (isVideoVisible ? videoWrapperView.frame.height : 0)
+   }
+ }
+ 
+diff --git a/iina/PlayerCore.swift b/iina/PlayerCore.swift
+index 16834aa..368c106 100644
+--- a/iina/PlayerCore.swift
++++ b/iina/PlayerCore.swift
+@@ -438,7 +438,8 @@ class PlayerCore: NSObject {
+    count of playable files.
+    */
+   @discardableResult
+-  func openURLs(_ urls: [URL], shouldAutoLoad autoLoad: Bool = true) -> Int? {
++  func openURLs(_ urls: [URL], shouldAutoLoad autoLoad: Bool = true,
++                preservingOrder: Bool = false, startingAt selectedURL: URL? = nil) -> Int? {
+     guard !urls.isEmpty else { return 0 }
+     let urls = Utility.resolveURLs(urls)
+ 
+@@ -455,7 +456,7 @@ class PlayerCore: NSObject {
+       }
+     }
+ 
+-    let playableFiles = getPlayableFiles(in: urls)
++    let playableFiles = getPlayableFiles(in: urls, preservingOrder: preservingOrder)
+     let count = playableFiles.count
+ 
+     // check playable files count
+@@ -469,10 +470,15 @@ class PlayerCore: NSObject {
+       info.shouldAutoLoadFiles = (count == 1)
+     }
+ 
+-    // open the first file
+-    open(playableFiles[0])
+-    // add the remaining to playlist
+-    playableFiles[1..<count].forEach { url in
++    let start = selectedURL.flatMap { selected in
++      playableFiles.firstIndex { $0.standardized == selected.standardized }
++    } ?? 0
++    // Open the selected track, then fill in the playlist without changing its order.
++    open(playableFiles[start])
++    for url in playableFiles.prefix(start).reversed() {
++      mpv.playlistInsert(url.isFileURL ? url.path : url.absoluteString, index: 0)
++    }
++    for url in playableFiles.dropFirst(start + 1) {
+       mpv.playlistAppend(url.isFileURL ? url.path : url.absoluteString)
+     }
+ 
+@@ -1556,6 +1562,28 @@ class PlayerCore: NSObject {
+     postNotification(.iinaPlaylistChanged)
+   }
+ 
++  func playDesktopMusicSearchResult(_ url: URL, library: [URL]) {
++    guard info.state.active else {
++      openURLs(library, shouldAutoLoad: false, preservingOrder: true, startingAt: url)
++      return
++    }
++    getPlaylist()
++    let path = url.standardizedFileURL.path
++    let existing = info.$playlist.withLock { list in
++      (list.firstIndex { item in
++        item.filename.hasPrefix("/") && URL(fileURLWithPath: item.filename).standardizedFileURL.path == path
++      }, list.count)
++    }
++    if let index = existing.0 {
++      playFileInPlaylist(index)
++    } else if existing.1 > 0 {
++      addToPlaylist(paths: [path])
++      playFileInPlaylist(existing.1)
++    } else {
++      openURLs(library, shouldAutoLoad: false, preservingOrder: true, startingAt: url)
++    }
++  }
++
+   func playlistRemove(_ index: Int) {
+     mpv.playlistRemove(index)
+     info.isShuffled = false
+diff --git a/iina/DesktopMusicControls.swift b/iina/DesktopMusicControls.swift
+new file mode 100644
+index 0000000..45b49aa
+--- /dev/null
++++ b/iina/DesktopMusicControls.swift
+@@ -0,0 +1,330 @@
++import Cocoa
++
++private enum DesktopMusicLibrary {
++  struct Track {
++    let url: URL
++    let title: String
++    let artist: String?
++
++    var searchText: String {
++      [title, artist ?? "", url.lastPathComponent].joined(separator: " ")
++    }
++  }
++
++  private static let extensions: Set<String> = [
++    "flac", "mp3", "m4a", "aac", "alac", "wav", "aiff", "aif", "ogg", "opus", "ape", "wma"
++  ]
++
++  static func files() throws -> [URL] {
++    let folder = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Desktop/歌", isDirectory: true)
++    return try FileManager.default.contentsOfDirectory(
++      at: folder, includingPropertiesForKeys: [.isRegularFileKey], options: [.skipsHiddenFiles]
++    ).filter { url in
++      extensions.contains(url.pathExtension.lowercased()) &&
++        (try? url.resourceValues(forKeys: [.isRegularFileKey]).isRegularFile) == true
++    }.sorted {
++      $0.lastPathComponent.localizedStandardCompare($1.lastPathComponent) == .orderedAscending
++    }
++  }
++
++  static func track(_ url: URL) -> Track {
++    let tags = url.pathExtension.lowercased() == "flac" ? flacTags(url) : [:]
++    return Track(url: url, title: tags["title"] ?? url.deletingPathExtension().lastPathComponent,
++                 artist: tags["artist"] ?? tags["albumartist"])
++  }
++
++  private static func flacTags(_ url: URL) -> [String: String] {
++    // Read metadata only from local files so a search doesn't hydrate OneDrive placeholders.
++    let dataLessFlag: UInt32 = 0x40000000
++    var info = stat()
++    guard lstat(url.path, &info) == 0, info.st_flags & dataLessFlag == 0,
++          let file = try? FileHandle(forReadingFrom: url) else { return [:] }
++    defer { try? file.close() }
++    do {
++      guard try file.read(upToCount: 4) == Data("fLaC".utf8) else { return [:] }
++      while let data = try file.read(upToCount: 4), data.count == 4 {
++        let header = Array(data)
++        let length = Int(header[1]) << 16 | Int(header[2]) << 8 | Int(header[3])
++        if header[0] & 0x7f == 4 {
++          guard length <= 1_048_576, let block = try file.read(upToCount: length) else { return [:] }
++          return readComments(Array(block))
++        }
++        if header[0] & 0x80 != 0 { break }
++        try file.seek(toOffset: file.offset() + UInt64(length))
++      }
++    } catch {
++      return [:]
++    }
++    return [:]
++  }
++
++  private static func readComments(_ bytes: [UInt8]) -> [String: String] {
++    var position = 0
++    func readLength() -> Int? {
++      guard bytes.count - position >= 4 else { return nil }
++      let value = Int(bytes[position]) | Int(bytes[position + 1]) << 8 |
++        Int(bytes[position + 2]) << 16 | Int(bytes[position + 3]) << 24
++      position += 4
++      return value
++    }
++    guard let vendorLength = readLength(), vendorLength <= bytes.count - position else { return [:] }
++    position += vendorLength
++    guard let count = readLength() else { return [:] }
++    var tags: [String: String] = [:]
++    for _ in 0..<count {
++      guard let length = readLength(), length <= bytes.count - position else { break }
++      let field = String(decoding: bytes[position..<(position + length)], as: UTF8.self)
++      position += length
++      let parts = field.split(separator: "=", maxSplits: 1)
++      guard parts.count == 2 else { continue }
++      let key = parts[0].lowercased()
++      if ["title", "artist", "albumartist"].contains(key), tags[key] == nil {
++        tags[key] = String(parts[1])
++      }
++    }
++    return tags
++  }
++}
++
++private func musicLabel(_ zh: String, _ en: String) -> String {
++  Locale.preferredLanguages.first?.hasPrefix("zh") == true ? zh : en
++}
++
++final class DesktopMusicControls: NSStackView {
++  private let play: ([URL]) -> Void
++  private let playSearchResult: (URL, [URL]) -> Void
++  private let popover = NSPopover()
++
++  init(compact: Bool, play: @escaping ([URL]) -> Void, playSearchResult: @escaping (URL, [URL]) -> Void) {
++    self.play = play
++    self.playSearchResult = playSearchResult
++    super.init(frame: .zero)
++    orientation = .horizontal
++    alignment = .centerY
++    spacing = compact ? 6 : 8
++    translatesAutoresizingMaskIntoConstraints = false
++    let actions: [(String, Selector)] = [
++      (musicLabel("搜索歌曲", "Search Music"), #selector(search(_:))),
++      (musicLabel("顺序播放", "Play in Order"), #selector(playOrdered)),
++      (musicLabel("随机播放", "Shuffle"), #selector(playShuffled))
++    ]
++    for (label, action) in actions {
++      let button = NSButton(title: label, target: self, action: action)
++      button.bezelStyle = .rounded
++      button.controlSize = compact ? .small : .regular
++      addArrangedSubview(button)
++    }
++  }
++
++  required init?(coder: NSCoder) { nil }
++
++  @objc private func search(_ button: NSButton) {
++    if popover.isShown {
++      popover.close()
++      return
++    }
++    popover.behavior = .transient
++    let search = DesktopMusicSearch(play: { [weak self] url, library in
++      self?.popover.close()
++      self?.playSearchResult(url, library)
++    }, close: { [weak self] in
++      self?.popover.close()
++    })
++    popover.contentViewController = search
++    popover.contentSize = DesktopMusicSearch.contentSize
++    popover.show(relativeTo: button.bounds, of: button, preferredEdge: .maxY)
++  }
++
++  @objc private func playOrdered() { playLibrary(shuffled: false) }
++  @objc private func playShuffled() { playLibrary(shuffled: true) }
++
++  private func playLibrary(shuffled: Bool) {
++    do {
++      let files = try DesktopMusicLibrary.files()
++      guard !files.isEmpty else {
++        showLibraryMessage(musicLabel("桌面「歌」里没有可播放的音频。", "No playable files in Desktop/歌."))
++        return
++      }
++      popover.close()
++      play(shuffled ? files.shuffled() : files)
++    } catch {
++      showLibraryMessage(musicLabel("无法读取桌面「歌」。", "Could not read Desktop/歌."))
++    }
++  }
++
++  private func showLibraryMessage(_ text: String) {
++    guard let window else { return }
++    let alert = NSAlert()
++    alert.messageText = text
++    alert.beginSheetModal(for: window)
++  }
++}
++
++private final class DesktopMusicSearch: NSViewController, NSSearchFieldDelegate, NSTableViewDataSource, NSTableViewDelegate {
++  static let contentSize = NSSize(width: 360, height: 280)
++  private static let minimumResultsHeight: CGFloat = 180
++  private let play: (URL, [URL]) -> Void
++  private let close: () -> Void
++  private let query = NSSearchField()
++  private let table = NSTableView()
++  private let status = NSTextField(labelWithString: "")
++  private let playButton = NSButton()
++  private var tracks: [DesktopMusicLibrary.Track] = []
++  private var matches: [DesktopMusicLibrary.Track] = []
++  private var loading = true
++  private var unreadable = false
++
++  init(play: @escaping (URL, [URL]) -> Void, close: @escaping () -> Void) {
++    self.play = play
++    self.close = close
++    super.init(nibName: nil, bundle: nil)
++  }
++
++  required init?(coder: NSCoder) { nil }
++
++  override func loadView() {
++    view = NSView(frame: NSRect(origin: .zero, size: Self.contentSize))
++    preferredContentSize = Self.contentSize
++    query.placeholderString = musicLabel("歌名、歌手或文件名", "Song, artist, or filename")
++    query.delegate = self
++    let backButton = NSButton(title: musicLabel("返回", "Back"), target: self, action: #selector(closeSearch))
++    backButton.bezelStyle = .rounded
++    backButton.setContentHuggingPriority(.required, for: .horizontal)
++    let searchBar = NSStackView(views: [query, backButton])
++    searchBar.orientation = .horizontal
++    searchBar.spacing = 6
++
++    let trackColumn = NSTableColumn(identifier: NSUserInterfaceItemIdentifier("track"))
++    trackColumn.resizingMask = .autoresizingMask
++    table.addTableColumn(trackColumn)
++    table.columnAutoresizingStyle = .lastColumnOnlyAutoresizingStyle
++    table.headerView = nil
++    table.rowHeight = 26
++    table.delegate = self
++    table.dataSource = self
++    table.target = self
++    table.doubleAction = #selector(playClicked)
++
++    let scroll = NSScrollView()
++    scroll.hasVerticalScroller = true
++    scroll.autohidesScrollers = true
++    scroll.documentView = table
++
++    status.textColor = .secondaryLabelColor
++    status.font = .systemFont(ofSize: NSFont.smallSystemFontSize)
++    playButton.title = musicLabel("播放所选", "Play Selected")
++    playButton.bezelStyle = .rounded
++    playButton.target = self
++    playButton.action = #selector(playSelected)
++    playButton.setContentHuggingPriority(.required, for: .horizontal)
++    let resultBar = NSStackView(views: [status, playButton])
++    resultBar.orientation = .horizontal
++    resultBar.spacing = 6
++    for element in [searchBar, scroll, resultBar] {
++      element.translatesAutoresizingMaskIntoConstraints = false
++      view.addSubview(element)
++      element.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10).isActive = true
++      element.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10).isActive = true
++    }
++    NSLayoutConstraint.activate([
++      view.widthAnchor.constraint(greaterThanOrEqualToConstant: Self.contentSize.width),
++      searchBar.topAnchor.constraint(equalTo: view.topAnchor, constant: 10),
++      scroll.heightAnchor.constraint(greaterThanOrEqualToConstant: Self.minimumResultsHeight),
++      scroll.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 6),
++      resultBar.topAnchor.constraint(equalTo: scroll.bottomAnchor, constant: 6),
++      resultBar.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -10)
++    ])
++    filter()
++    DispatchQueue.global(qos: .userInitiated).async { [weak self] in
++      do {
++        let files = try DesktopMusicLibrary.files()
++        let tracks = files.map(DesktopMusicLibrary.track)
++        DispatchQueue.main.async { self?.didLoad(tracks, unreadable: false) }
++      } catch {
++        DispatchQueue.main.async { self?.didLoad([], unreadable: true) }
++      }
++    }
++  }
++
++  override func viewDidAppear() {
++    super.viewDidAppear()
++    view.window?.makeFirstResponder(query)
++  }
++
++  private func didLoad(_ tracks: [DesktopMusicLibrary.Track], unreadable: Bool) {
++    self.tracks = tracks
++    self.unreadable = unreadable
++    loading = false
++    filter()
++  }
++
++  private func filter() {
++    let words = query.stringValue.split(whereSeparator: \.isWhitespace)
++    matches = tracks.filter { track in
++      words.allSatisfy { track.searchText.localizedStandardContains(String($0)) }
++    }
++    table.reloadData()
++    if !matches.isEmpty { select(0) }
++    playButton.isEnabled = matches.indices.contains(table.selectedRow)
++    if loading {
++      status.stringValue = musicLabel("正在读取歌曲…", "Loading songs…")
++    } else if unreadable {
++      status.stringValue = musicLabel("无法读取桌面「歌」。", "Could not read Desktop/歌.")
++    } else if matches.isEmpty {
++      status.stringValue = musicLabel("没有匹配的歌曲。", "No matching songs.")
++    } else {
++      status.stringValue = musicLabel("\(matches.count) 首", "\(matches.count) tracks")
++    }
++  }
++
++  private func select(_ row: Int) {
++    table.selectRowIndexes(IndexSet(integer: row), byExtendingSelection: false)
++    table.scrollRowToVisible(row)
++  }
++
++  func controlTextDidChange(_ notification: Notification) { filter() }
++
++  func control(_ control: NSControl, textView: NSTextView, doCommandBy command: Selector) -> Bool {
++    guard !textView.hasMarkedText() else { return false }
++    switch command {
++    case #selector(NSResponder.moveDown(_:)):
++      if !matches.isEmpty { select(min(table.selectedRow + 1, matches.count - 1)) }
++    case #selector(NSResponder.moveUp(_:)):
++      if !matches.isEmpty { select(max(table.selectedRow - 1, 0)) }
++    case #selector(NSResponder.insertNewline(_:)):
++      break
++    case #selector(NSResponder.cancelOperation(_:)):
++      close()
++    default:
++      return false
++    }
++    return true
++  }
++
++  @objc private func closeSearch() { close() }
++
++  override func cancelOperation(_ sender: Any?) { close() }
++
++  @objc private func playClicked() { playRow(table.clickedRow) }
++
++  @objc private func playSelected() { playRow(table.selectedRow) }
++
++  func tableViewSelectionDidChange(_ notification: Notification) {
++    playButton.isEnabled = matches.indices.contains(table.selectedRow)
++  }
++
++  private func playRow(_ row: Int) {
++    if matches.indices.contains(row) { play(matches[row].url, tracks.map(\.url)) }
++  }
++
++  func numberOfRows(in tableView: NSTableView) -> Int { matches.count }
++
++  func tableView(_ tableView: NSTableView, viewFor column: NSTableColumn?, row: Int) -> NSView? {
++    let track = matches[row]
++    let title = track.artist.map { "\(track.title) — \($0)" } ?? track.title
++    let label = NSTextField(labelWithString: title)
++    label.lineBreakMode = .byTruncatingTail
++    label.toolTip = track.url.lastPathComponent
++    return label
++  }
++}
